@@ -1,32 +1,38 @@
-
-import 'package:barcode_scan/barcode_scan.dart';
+import 'package:flutter/material.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/common/utils/NavigatorUtils.dart';
-import 'package:workorder/page/BasicDemo.dart';
 import 'package:workorder/widget/BaseWidget.dart';
 import 'package:workorder/widget/HomeDrawer.dart';
 import 'package:workorder/widget/MyScaffoldWidger.dart';
-import 'package:flutter/material.dart';
+import 'package:workorder/widget/item/CustNoTextFieldWidget.dart';
+///
+///裝機回報頁面
+///Date: 2020-02-27
+class InstalledReturnPage extends StatefulWidget {
 
 
-
-class HomePage extends StatefulWidget {
-  static final String sName = "home";
   @override
-  _HomePageState createState() => _HomePageState();
+  _InstalledReturnPageState createState() => _InstalledReturnPageState();
 }
 
-class _HomePageState extends State<HomePage> with BaseWidget, SingleTickerProviderStateMixin {
+class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidget{
 
   ///bottomNavigatorBar index
   int _bnbIndex = 0;
-  String _counter, _value = "";
-  
 
   ///widget body
   Widget _body() {
-    return BasicDemo("Sliver");
+    Widget body;
 
+    body = Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          CustNoTextFieldWidget(),
+        ],
+      ),
+    );
+    return body;
   }
 
   ///bottomNavigationBar action
@@ -78,14 +84,7 @@ class _HomePageState extends State<HomePage> with BaseWidget, SingleTickerProvid
   List<Widget> _appActions() {
 
     List<Widget> list = [];
-    list.add(
-      IconButton(
-        icon: Icon(Icons.camera),
-        onPressed: (){
-
-        },
-      )
-    );
+    
     return list;
   }
 
@@ -95,7 +94,7 @@ class _HomePageState extends State<HomePage> with BaseWidget, SingleTickerProvid
       drawer: HomeDrawer(),
       backgroundColor: Theme.of(context).primaryColor,
       indicatorColor: Colors.white,
-      title: Text('首頁', style: TextStyle(fontSize: MyScreen.homePageFontSize(context)),),
+      title: Text('裝機回報', style: TextStyle(fontSize: MyScreen.homePageFontSize(context)),),
       actions: _appActions(),
       onPageChanged: (index) {
         

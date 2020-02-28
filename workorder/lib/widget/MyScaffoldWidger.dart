@@ -94,7 +94,7 @@ class _MyScaffoldWidgetState extends State<MyScaffoldWidget> {
         actions: widget.actions,
         
       ),
-      body: Container(),
+      body: widget.getBody,
       bottomNavigationBar: widget.bottomNavBarChild,
     );
   }

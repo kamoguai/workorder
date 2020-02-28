@@ -69,7 +69,7 @@ class HomeDrawer extends StatelessWidget with BaseWidget {
                     title: autoTextSizeLeft('<1> 裝機回報', TextStyle(color: Colors.black), context)
                   ),
                   onTap: (){
-                    NavigatorUtils.goHome(context);
+                    NavigatorUtils.goInstalledReturn(context);
                   },
                 ),
                 

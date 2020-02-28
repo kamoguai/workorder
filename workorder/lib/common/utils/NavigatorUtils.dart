@@ -3,7 +3,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:workorder/page/HomePage.dart';
+import 'package:workorder/page/InstalledReturnPage.dart';
 import 'package:workorder/page/LoginPage.dart';
+import 'package:workorder/widget/item/CustNoTextFieldWidget.dart';
 ///
 ///導航欄
 ///Date: 2019-10-04
@@ -43,6 +45,11 @@ class NavigatorUtils {
   ///pushReplacementNamed需要由main.dart做導航
   static goHome(BuildContext context) {
     Navigator.pushReplacementNamed(context, HomePage.sName);
+  }
+
+  ///裝機回報頁面
+  static goInstalledReturn(BuildContext context) {
+    navigatorRouter(context, InstalledReturnPage());
   }
 
   

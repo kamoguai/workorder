@@ -62,202 +62,130 @@ class Address {
     return "$serverUrl?";
   }
 
-  //<-------------------- 派裝相關 api workInstall -------------------->
+  //<-------------------- 回報相關 api WorkReply -------------------->
   
-  ///查詢子管理區域
-  ///
-  ///param: accNo, function, currentManageSectionCode
-  static queryManageSection() {
+  ///ping snr
+  static getPingSNR() {
+
     changeEnterTest();
-    return "$domainNameAES";
+    return "${ssoDomainName}WorkReply/json/interface!callPingSNR.action?";
   }
 
-  ///查詢派單信息
-  ///
-  ///params: accNo, function, type, employeeCode, pageIndex, pageSize
-  static queryCustomerWorkOrderInfos() {
+  ///裝機回報送出
+  static postWorkReply() {
     changeEnterTest();
-    return "$domainNameAES";
+    return "${ssoDomainName}WorkReply/json/interface!workReply.action?";
   }
 
-  ///查詢套餐訊息
-  ///
-  ///param: function, accNo, areaCode
-  static queryProductInfo() {
+  ///裝機回報狀態
+  static getUninstallCode() {
     changeEnterTest();
-    return "$domainNameAES";
+    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCode.action?";
   }
 
-  ///查詢開戶基本信息
-  ///
-  ///param: function, accNo, 
-  static queryOpenBaseInfo(){
+  ///裝機回報處理方式
+  static getUninstallCodeItem() {
     changeEnterTest();
-    return "$domainNameAES";
+    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCodeItem.action?";
+  }
+
+  ///客編轉工單號
+  static getCustNoToWkNo() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!custNoToWkNO.action?"; 
+  }
+
+  ///維修換機送出
+  static postRepairReply() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!repairReply.action?"; 
+  }
+
+  ///維修回報狀態
+  static getRepairUninstallCode() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!getRepairUninstallCode.action?"; 
+  }
+
+  ///維修回報處理方式
+  static getRepairUninstallCodeItem() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!getRepairUninstallCodeItem.action?"; 
+  }
+
+  ///設備回收送出
+  static postRecyclingReply() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!RecyclingReply.action?"; 
+  }
+
+  ///設備回收狀態
+  static getRYCUninstallCode() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!getRYCUninstallCode.action?"; 
+  }
+
+  ///設備回收處理方式
+  static getRYCUninstallCodeItem() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!getRYCUninstallCodeItem.action?"; 
+  }
+
+  ///刷新授權查詢
+  static getCustomerInfo() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!customerInfo.action?"; 
+  }
+
+  ///刷新授權
+  static postCustAuthRepeat() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!custAuthRepeat.action?"; 
+  }
+
+  ///獨立貓開通&換機
+  static postCMAuth() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!CMAuth.action?"; 
+  }
+
+  ///STB開通(大盒子掃QRCode)
+  static postBookingOrReplaceAuth() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!bookingOrReplaceAuth.action?"; 
+  }
+
+  ///小盒子開通
+  static postBookingAuthN9201() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!bookingAuthN9201.action?"; 
+  }
+
+  ///小盒子查詢
+  static getN9201Info() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!getN9201Info.action?"; 
+  }
+
+  ///小盒子換機
+  static postReplaceAuthN9201() {
+    changeEnterTest();
+    return "${ssoDomainName}WorkReply/json/interface!replaceAuthN9201.action?"; 
+  }
+
+  
+
+  //<-------------------- SNR相關 api SNR -------------------->
+
+  ///新增回報log
+  static postAddReportLog({custNo, description, userNo, userName,}) {
+    changeEnterTest();
+    return "${kSNRHostName}SNRProcess?FunctionName=AddReportLog&CustCD=$custNo&InputText=$description&SenderID=$userNo.accNo&SenderName=$userName&From=WorkReply";
   }
   
-  ///查詢班次 - 初裝, 改約, 加裝
-  ///
-  ///初裝 param: function, accNo, bookingDate
-  ///
-  ///改約 param: function, accNo, bookingDate, manageSectionCode, businessType, workorderCode
-  ///
-  ///加裝 param: function, accNo, bookingDate, manageSectionCode, businessType, purchageProductionInfo
-  static queryBookService() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
 
-  ///試算 - 初裝, 加裝
-  ///
-  ///初裝 param: function, accNo, trialType, manageSectionCode, bookingDate, dtvCode, dtvMonth, cmCode, cmMonth, allowanceMonth, slaveNumber, crossFloorNumber, networkCableNunber, additionalInfo, marketingPlanCode
-  ///
-  ///加裝 param: function, accNo, trialType, manageSectionCode, bookingDate, dtvCode, dtvMonth, cmCode, cmMonth, allowanceMonth, slaveNumber, crossFloorNumber, networkCableNunber, additionalInfo, marketingPlanCode, customerCode,, isAlign, additionalInfos
-  static postTrial() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-  
-  ///立案
-  ///
-  ///param: function, accNo, 
-  ///customerInfo{name, moibile, telphone, gender, customerType, partyIdentification, installAddress, postAddress},
-  ///purchaseInfo{dctvCode, dvtvMonth, cmdCode, cmMonth, additionalInfos, allowanceMonth, slaveNumber, crossFloorNumber, sumMoney, networkCableNumber},
-  ///oderInfo{bookingDate, saleManCode, operator, description},
-  ///giftInfo{classification, type, month},
-  static openPurchase() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
 
-  ///加裝
-  ///
-  ///param: function, accNo,
-  ///purchaseProductInfo{dctvCode, dctvMonth, cmCode, cmMonth, isAlign, slaveNumber, crossFloorNumber, sumMoney},
-  ///orderInfo{bookingDate, saleManCode, operator, description}
-  ///addPurchaseData{purchaseProductInfo, orderInfo, customerCode}
-  ///addPurchaseInfo{addPurchaseData}
-  ///giftsInfo{classification, type, month}
-  static addPurchase() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-  
-  ///查詢可加裝客戶訊息, type=4,installAddress必填
-  ///para: function, accNo, type, value
-  ///installAddress{parentManageSectoinCode, community, lane, unit, ofUnit, floor, floorOf, description}
-  static queryAddPurchaseCustomerInfos(){
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///匹配地址
-  ///param: function, accNo,
-  ///installAddress{parentManageSectoinCode, community, lane, unit, ofUnit, floor, floorOf, description}
-  ///postAddress{parentManageSectoinCode, community, lane, unit, ofUnit, floor, floorOf, description}
-  static matchAddress(){
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///取得全部前廠商列表
-  ///param: function, accNo, areaCode, 
-  static getIndustryList() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///改約
-  ///param: function, accNo, operator, workorderCode, bookingDate, changeBookReason
-  static modifyBookingData(){
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///撤銷
-  ///param: function, accNo, operator, workorderCode, description, reasonCode
-  static cancelWoroOrder() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///取得撤銷基本信息
-  ///param: function, accNo, 
-  static getQueryCancelBaseInfo(){
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///立案基本下拉選單
-  ///param: function, accNo
-  static getBaseListInfo() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///save競業
-  ///param: function, accNo, wkNo, Industry
-  static postInsertindustry() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///查詢工單競業
-  ///param: function, accNo, wkNo,
-  static getIndustryWithWkno() {
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///查詢人員列表
-  ///param: function, accNo, deptCD
-  static getQueryemplyeeList(){
-    changeEnterTest();
-    return "$domainNameAES";
-  }
-
-  ///取得通路業績
-  ///param: dataDate, areaCode, accNo
-  static getInstChannelWKEMP() {
-    changeEnterTest();
-    return "$workInstallDomainName" + "getChannelWKEMP?";
-  }
-
-  ///取得通路部門個人業績
-  ///param: dataDate, areaCode, accNo, deptCode
-  static getInstDeptWKEMP() {
-    changeEnterTest();
-    return "$workInstallDomainName" + "getDeptWKEMP?";
-  }
-
-  ///取得通路區域
-  ///param: dataDate, accNo, lineNo, channDeptCd, deptCode
-  static getInstAreaWKEMP() {
-    changeEnterTest();
-    return "$workInstallDomainName" + "getAreaWKEMP?";
-  }
-
-   ///取得贈送月份
-   ///para: type, bossCode,
-   static getGiftsMonth() {
-     changeEnterTest();
-    return "$workInstallDomainName" + "getGiftsMonth?";
-   }
-
-   ///取得派修下拉選單
-   ///param: none
-   static getBossPhenData() {
-    changeEnterTest();
-    return "$workInstallDomainName" + "bossPhenData";
-   }
-
-   ///報修派單
-   ///param: customerCode, operatorCode, phenomenonTypeCode, phenomenonCode, bookingDate, description
-   static postOrderReportFault({customerCode, operatorCode, phenomenonTypeCode, phenomenonCode, bookingDate, description}) {
-    changeEnterTest();
-    return "$workInstallDomainName" + "orderReportFault?customerCode=$customerCode&operatorCode=$operatorCode&phenomenonTypeCode=$phenomenonTypeCode&phenomenonCode=$phenomenonCode&bookingDate=$bookingDate&description=$description";
-   }
-
+  //<-------------------- 切換頻道 -------------------->
   ///切換測/正式機路徑
   static changeEnterTest() async {
     if (isEnterTest) {
