@@ -4,11 +4,19 @@ import 'package:workorder/widget/BaseWidget.dart';
 /// 客編/工單，輸入用widget
 /// Date: 2020-02-27
 /// 
-class CustNoTextFieldWidget extends StatelessWidget with BaseWidget{
+class CustNoTextFieldWidget extends StatefulWidget {
 
+  Function callBackFunc;
+  CustNoTextFieldWidget({this.callBackFunc});
+
+  @override
+  _CustNoTextFieldWidgetState createState() => _CustNoTextFieldWidgetState();
+}
+
+class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with BaseWidget{
   TextEditingController textController =  TextEditingController();
   FocusNode textNode =  FocusNode();
-
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -48,7 +56,9 @@ class CustNoTextFieldWidget extends StatelessWidget with BaseWidget{
                 child: autoTextSize('查詢', TextStyle(color: Colors.white), context),
                 color: Colors.blueAccent,
                 onPressed: () {
+                  textNode.unfocus();
                   print('button click => ' + this.textController.text);
+                  widget.callBackFunc(this.textController.text);
                 },
               ),
             ),

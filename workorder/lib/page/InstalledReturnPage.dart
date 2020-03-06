@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/common/utils/NavigatorUtils.dart';
 import 'package:workorder/widget/BaseWidget.dart';
@@ -28,11 +29,19 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          CustNoTextFieldWidget(),
+          CustNoTextFieldWidget(callBackFunc: this._callBackFunc,),
         ],
       ),
     );
     return body;
+  }
+
+  void _callBackFunc(String custNo) {
+    Fluttertoast.showToast(msg: custNo);
+  }
+
+  _getCustNoToWkNo(String str) {
+      
   }
 
   ///bottomNavigationBar action

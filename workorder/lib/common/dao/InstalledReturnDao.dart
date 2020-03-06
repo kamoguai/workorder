@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:workorder/common/config/Config.dart';
+import 'package:workorder/common/dao/DaoResult.dart';
+import 'package:workorder/common/net/Address.dart';
 import 'package:workorder/common/net/Api.dart';
+import 'package:workorder/common/utils/AesUtils.dart';
 
 ///
 ///裝機回報相關dao
@@ -15,7 +18,61 @@ class InstalledReturnDao {
     if (Config.DEBUG) {
       print("裝機回報送出req => " + str);
     }
-    
+    ///aesEncode
+    var aesData = AesUtils.aes128Encrypt(str);
+    Map paramsData = {"data": aesData};
+    var res = await HttpManager.netFetch(Address.postWorkReply(), paramsData, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("裝機回報送出resp => " + res.data.toString());
+      }
+      mainDataArray = res.data;
+      return new DataResult(mainDataArray, true);
+    }
   }
+
+  ///裝機回報狀態下拉
+  static getUninstallCode(Map<String,dynamic> jsonMap) async {
+    Map<String, dynamic> mainDataArray = {};
+    ///map轉json
+    String str = json.encode(jsonMap);
+    if (Config.DEBUG) {
+      print("裝機回報狀態req => " + str);
+    }
+    ///aesEncode
+    var aesData = AesUtils.aes128Encrypt(str);
+    Map paramsData = {"data": aesData};
+    var res = await HttpManager.netFetch(Address.getUninstallCode(), paramsData, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("裝機回報狀態resp => " + res.data.toString());
+      }
+      mainDataArray = res.data;
+      return new DataResult(mainDataArray, true);
+    }
+  }
+
+  ///裝機回報處理方式下拉
+  static getUninstallCodeItem(Map<String,dynamic> jsonMap) async {
+    Map<String, dynamic> mainDataArray = {};
+    ///map轉json
+    String str = json.encode(jsonMap);
+    if (Config.DEBUG) {
+      print("裝機回報處理方式req => " + str);
+    }
+    ///aesEncode
+    var aesData = AesUtils.aes128Encrypt(str);
+    Map paramsData = {"data": aesData};
+    var res = await HttpManager.netFetch(Address.getUninstallCodeItem(), paramsData, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (Config.DEBUG) {
+        print("裝機回報處理方式resp => " + res.data.toString());
+      }
+      mainDataArray = res.data;
+      return new DataResult(mainDataArray, true);
+    }
+  }
+
+
 
 }
