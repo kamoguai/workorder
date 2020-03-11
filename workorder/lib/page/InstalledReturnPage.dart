@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/common/utils/NavigatorUtils.dart';
 import 'package:workorder/widget/BaseWidget.dart';
 import 'package:workorder/widget/HomeDrawer.dart';
 import 'package:workorder/widget/MyScaffoldWidger.dart';
 import 'package:workorder/widget/item/CustNoTextFieldWidget.dart';
+import 'package:workorder/widget/item/UninstallCodeWidget.dart';
 ///
 ///裝機回報頁面
 ///Date: 2020-02-27
@@ -18,6 +18,8 @@ class InstalledReturnPage extends StatefulWidget {
 
 class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidget{
 
+  ///unInstallCodeData
+  Map<String, dynamic> unInstallCodeData;
   ///bottomNavigatorBar index
   int _bnbIndex = 0;
 
@@ -29,19 +31,18 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          CustNoTextFieldWidget(callBackFunc: this._callBackFunc,),
+          CustNoTextFieldWidget(callBackFunc: this._callBackFunc,fromFunc: 'Inst',),
+          UninstallCodeWidget(jsonData: unInstallCodeData, formFunc: 'Inst',)
         ],
       ),
     );
     return body;
   }
 
-  void _callBackFunc(String custNo) {
-    Fluttertoast.showToast(msg: custNo);
-  }
-
-  _getCustNoToWkNo(String str) {
-      
+  void _callBackFunc(Map<String, dynamic> jsonData) {
+    setState(() {
+      unInstallCodeData = jsonData;
+    });
   }
 
   ///bottomNavigationBar action

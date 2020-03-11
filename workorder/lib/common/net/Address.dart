@@ -78,9 +78,9 @@ class Address {
   }
 
   ///裝機回報狀態
-  static getUninstallCode() {
+  static getUninstallCode({wkNo}) {
     changeEnterTest();
-    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCode.action?";
+    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCode.action?wkNo=$wkNo";
   }
 
   ///裝機回報處理方式
@@ -90,9 +90,9 @@ class Address {
   }
 
   ///客編轉工單號
-  static getCustNoToWkNo() {
+  static getCustNoToWkNo({custNo}) {
     changeEnterTest();
-    return "${ssoDomainName}WorkReply/json/interface!custNoToWkNO.action?"; 
+    return "${ssoDomainName}WorkReply/json/interface!custNoToWkNO.action?custNo=$custNo"; 
   }
 
   ///維修換機送出

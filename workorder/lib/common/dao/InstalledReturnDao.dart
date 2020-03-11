@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:workorder/common/config/Config.dart';
 import 'package:workorder/common/dao/DaoResult.dart';
@@ -39,15 +40,19 @@ class InstalledReturnDao {
     if (Config.DEBUG) {
       print("裝機回報狀態req => " + str);
     }
+    String wkNo = jsonMap["wkNo"];
     ///aesEncode
     var aesData = AesUtils.aes128Encrypt(str);
     Map paramsData = {"data": aesData};
-    var res = await HttpManager.netFetch(Address.getUninstallCode(), paramsData, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.getUninstallCode(wkNo: wkNo), paramsData, null, new Options(method: "post", contentType: ContentType.json));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("裝機回報狀態resp => " + res.data.toString());
       }
-      mainDataArray = res.data;
+      if (res.data['retCode'] == "00") {
+        
+        mainDataArray = res.data["jsonData"];
+      }
       return new DataResult(mainDataArray, true);
     }
   }

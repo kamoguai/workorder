@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:workorder/common/config/Config.dart';
@@ -17,21 +18,25 @@ class BaseDao {
   ///客編轉工單號
   static getCustNoToWkNo(Map<String,dynamic> jsonMap) async {
     Map<String, dynamic> mainDataArray = {};
+    List<dynamic> mList = new List<dynamic>();
     ///map轉json
     String str = json.encode(jsonMap);
     if (Config.DEBUG) {
-      print("裝機回報處理方式req => " + str);
+      print("客編轉工單號req => " + str);
     }
+    String custNo = jsonMap["custNo"];
     ///aesEncode
     var aesData = AesUtils.aes128Encrypt(str);
     Map paramsData = {"data": aesData};
-    var res = await HttpManager.netFetch(Address.getCustNoToWkNo(), paramsData, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(Address.getCustNoToWkNo(custNo: custNo), paramsData, null, new Options(method: "post", contentType: ContentType.json));
     if (res != null && res.result) {
       if (Config.DEBUG) {
-        print("裝機回報處理方式resp => " + res.data.toString());
+        print("客編轉工單號resp => " + res.data.toString());
       }
-      mainDataArray = res.data;
-      return new DataResult(mainDataArray, true);
+      if (res.data['retCode'] == "00") {
+        mList = res.data['jsonData'];
+      }
+      return new DataResult(mList, true);
     }
   }
 
