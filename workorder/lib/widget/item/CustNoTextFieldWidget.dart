@@ -37,7 +37,11 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
       Navigator.pop(context);
       if (res.result) {
         var result = res.data[0]['wkNo'];
-        _getCode(wkNo: result);
+        setState(() {
+          textController.text  = result;
+          nowType = searchType.wkNo;
+          _getCode(wkNo: result);
+        });
       }
   }
 
@@ -68,7 +72,10 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
     var res = await InstalledReturnDao.getUninstallCode(jsonMap);
     Navigator.pop(context);
     if (res.result) {
-      widget.callBackFunc(res.data);
+      Map<String, dynamic> resData = Map<String, dynamic>();
+      resData = res.data;
+      resData["wkNo"] = wkNo;
+      widget.callBackFunc(resData);
     }
   }
 
@@ -97,6 +104,12 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
   }
   
   @override
+  void initState() {
+   super.initState();
+   textController.text = "2470011355"; 
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 4),
@@ -104,6 +117,7 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
       child: Row(
         children: <Widget>[
           Expanded(
+            flex: 2,
             child: InkWell(
               child: Container(
                 alignment: Alignment.center,
@@ -115,7 +129,7 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
             ), 
           ),
           Expanded(
-            flex: 3,
+            flex: 5,
             child: Padding(
               padding: EdgeInsets.all(4),
               child: TextField(
@@ -138,14 +152,21 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
             ),
           ),
           Expanded(
+            flex: 2,
             child: Container(
               child: FlatButton(
                 child: autoTextSize('查詢', TextStyle(color: Colors.white), context),
                 color: Colors.blueAccent,
                 onPressed: () {
                   textNode.unfocus();
-                  if (validTextValue())
-                    _getCustNoToWkNo();
+                  if (validTextValue()) {
+                    if (nowType == searchType.custNo) {
+                      _getCustNoToWkNo();
+                    }
+                    else {
+                      _getCode(wkNo: textController.text);
+                    }
+                  }
                 },
               ),
             ),

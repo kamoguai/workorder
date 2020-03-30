@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:workorder/common/config/Config.dart';
 import 'package:workorder/common/net/Address.dart';
 import 'package:workorder/common/net/Api.dart';
@@ -35,8 +36,12 @@ class BaseDao {
       }
       if (res.data['retCode'] == "00") {
         mList = res.data['jsonData'];
+        return new DataResult(mList, true);
       }
-      return new DataResult(mList, true);
+      else {
+        Fluttertoast.showToast(msg: res.data["retMSG"], timeInSecForIos: 2);
+        return new DataResult(null, false);
+      }
     }
   }
 

@@ -84,9 +84,9 @@ class Address {
   }
 
   ///裝機回報處理方式
-  static getUninstallCodeItem() {
+  static getUninstallCodeItem({wkNo, unInstallCode}) {
     changeEnterTest();
-    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCodeItem.action?";
+    return "${ssoDomainName}WorkReply/json/interface!getBookUninstallCodeItem.action?wkNo=$wkNo&uninstallCode=$unInstallCode";
   }
 
   ///客編轉工單號
