@@ -2,39 +2,35 @@
 import 'package:flutter/material.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/widget/BaseWidget.dart';
-
 ///
-///回報狀態選擇器
-///Date: 2020-03-23
-///
+///競業選擇器
+///Date: 2020-03-30
+class IndustrySelectorDialog extends StatelessWidget with BaseWidget{
 
-
-class UnInstallCodeSelectorDialog extends StatelessWidget with BaseWidget{
-
-  ///由上頁傳入dataList
+  ///由前頁傳入data
   final List<dynamic> dataArray;
-  ///由上頁傳入BackFuncList
+  ///由前頁傳入callback func
   final Function callBackFunc;
-  UnInstallCodeSelectorDialog({Key key,this.dataArray, this.callBackFunc}) : super(key: key);
+  IndustrySelectorDialog({this.dataArray, this.callBackFunc});
 
   ///widget list item
   Widget listItem(BuildContext context, int index) {
     Widget item;
     var dicIndex = dataArray[index];
-    var dic = SelectorModel.forMap(dicIndex);
     item = GestureDetector(
       child: Container(
-        color: dic.backgroundColorCode == null ? Color(MyColors.hexFromStr('FFFFFF')) : Color(MyColors.hexFromStr(dic.backgroundColorCode)),
+        color: Color(MyColors.hexFromStr('FFFFFF')),
         width: double.infinity,
         height: titleHeight(context),
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
         child: Center(
-          child: autoTextSize(dic.unInstallName, TextStyle(color: Colors.black, fontSize: MyScreen.homePageFontSize(context)), context),
+          child: autoTextSize(dicIndex, TextStyle(color: Colors.black, fontSize: MyScreen.homePageFontSize(context)), context),
         )
       ),
       onTap: () {
         callBackFunc(dicIndex);
         Navigator.pop(context);
+        
       },
     );
     
@@ -64,26 +60,12 @@ class UnInstallCodeSelectorDialog extends StatelessWidget with BaseWidget{
           Container(
             height: titleHeight(context),
             child: Center(
-              child: autoTextSize('選擇問題', TextStyle(color: Colors.black), context),
+              child: autoTextSize('競業選擇', TextStyle(color: Colors.black), context),
             ),
           ),
           dataArray.length > 0 ? listView() : Container(),
        ],
       ),
     );
-  }
-}
-
-class SelectorModel {
-  String unInstallName;
-  String unInstallCode;
-  String backgroundColorCode;
-  SelectorModel();
-  SelectorModel.forMap(dic) {
-
-    unInstallName = dic["unInstallName"] == null ? "" : dic["unInstallName"];
-    unInstallCode = dic["unInstallCode"] == null ? "" : dic["unInstallCode"];
-    backgroundColorCode = dic["backgroundColorCode"] == null ? "" : dic["backgroundColorCode"];
-    
   }
 }

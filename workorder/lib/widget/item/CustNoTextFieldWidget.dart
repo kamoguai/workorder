@@ -17,8 +17,10 @@ class CustNoTextFieldWidget extends StatefulWidget {
   final Function callBackFunc;
   ///來自功能
   final String fromFunc;
+  ///scan str
+  final String scanValue;
 
-  CustNoTextFieldWidget({this.callBackFunc, this.fromFunc});
+  CustNoTextFieldWidget({this.callBackFunc, this.fromFunc, this.scanValue});
 
   @override
   _CustNoTextFieldWidgetState createState() => _CustNoTextFieldWidgetState();
@@ -28,6 +30,7 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
   TextEditingController textController =  TextEditingController();
   FocusNode textNode =  FocusNode();
   var nowType = searchType.custNo;
+  String _custNo, _wkNo = "";
   ///呼叫客編轉工單
   _getCustNoToWkNo() async {
       Map<String, dynamic> jsonMap = new Map<String, dynamic>();
@@ -40,6 +43,7 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
         setState(() {
           textController.text  = result;
           nowType = searchType.wkNo;
+          this._wkNo = textController.text;
           _getCode(wkNo: result);
         });
       }
@@ -106,7 +110,21 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
   @override
   void initState() {
    super.initState();
-   textController.text = "2470011355"; 
+    this.nowType = searchType.custNo;
+    textController.text = "2470011331"; 
+    this._custNo = textController.text;
+   
+  }
+
+  @override
+  void didUpdateWidget(CustNoTextFieldWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.scanValue.length != 0) {
+
+      textController.text = widget.scanValue;
+      this._wkNo = textController.text;
+      nowType = searchType.wkNo;
+    }
   }
 
   @override
@@ -181,11 +199,12 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
     setState(() {
       if (nowType == searchType.custNo) {
         nowType = searchType.wkNo;
+        textController.text = this._wkNo;
       }
       else {
         nowType = searchType.custNo;
+        textController.text = this._custNo;
       }
-      textController.clear();
     });
   }
 

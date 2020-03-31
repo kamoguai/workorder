@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:workorder/common/dao/InstalledReturnDao.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/widget/BaseWidget.dart';
+import 'package:workorder/widget/dialog/IndustrySelectorDialog.dart';
 import 'package:workorder/widget/dialog/UnInstallCodeItemSelectorDialog.dart';
 import 'package:workorder/widget/dialog/UnInstallCodeSelectorDialog.dart';
 ///
@@ -35,7 +37,8 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
   Map<String, dynamic> pickCodeData = Map<String, dynamic>();
   Map<String, dynamic> pickCodeItemData = Map<String, dynamic>();
   Map<String, dynamic> jsonData = Map<String, dynamic>();
-
+  
+  ///狀態下拉選定
   _callBackFuncCode(Map<String, dynamic> pickData) {
     setState(() {
       uninstalCodeName = pickData["unInstallName"];
@@ -43,12 +46,21 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
       _getUnInstallCodeItemData(pickCodeData);
     });
   }
-
+  
+  ///問題下拉選定
   _callBackFuncCodeItem(Map<String, dynamic> pickData) {
     setState(() {
       widget.callBackFunc(pickData);
       pickCodeItemData = pickData;
       uninstallItemCodeName = pickData["name"];
+      
+    });
+  }
+
+  ///競業下拉選定
+  _callBackFuncIndustry(String pickData) {
+    setState(() {
+      industryName = pickData;
     });
   }
 
@@ -77,6 +89,7 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
     }
   }
 
+
   ///狀態選擇器
   _unInstallCodeSelectorDialog(BuildContext context) {
      return Material(
@@ -90,7 +103,7 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
               margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Container(
                 height: titleHeight(context) * (this.unInstallList.length + 2),
-                child: UnInstallCodeSelectorDialog(dataList: this.unInstallList, callBackFunc: _callBackFuncCode,),
+                child: UnInstallCodeSelectorDialog(dataArray: this.unInstallList, callBackFunc: _callBackFuncCode,),
               ),
             ),
             Card(
@@ -130,6 +143,45 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
               child: Container(
                 height: titleHeight(context) * (this.unInstallCodeItemList.length + 2),
                 child: UnInstallCodeItemSelectorDialog(dataArray: this.unInstallCodeItemList, callBackFunc: _callBackFuncCodeItem,),
+              ),
+            ),
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: InkWell(
+                child: Container(
+                  color: Colors.grey,
+                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                  width: double.infinity,
+                  height: titleHeight(context),
+                  child: Center(
+                    child: autoTextSize('取消', TextStyle(color: Colors.white, fontSize: MyScreen.homePageFontSize(context)), context),
+                  ),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              )
+            )
+          ],
+        )
+      )
+    );
+  }
+
+  ///競業選擇器
+  _industrySelectorDialog(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        height: titleHeight(context) * (this.industryArr.length + 2),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Container(
+                height: titleHeight(context) * (this.industryArr.length + 2),
+                child: IndustrySelectorDialog(dataArray: this.industryArr, callBackFunc: _callBackFuncIndustry,),
               ),
             ),
             Card(
@@ -270,7 +322,10 @@ class _UninstallCodeWidgetState extends State<UninstallCodeWidget> with BaseWidg
                   ),
                   onTap: () {
                     if (industryArr.length > 0) {
-                      _showSelectorController(context, dataList: industryArr, title: '競業');
+                      showDialog(
+                        context: context, 
+                        builder: (BuildContext context)=> _industrySelectorDialog(context)
+                      );
                     }
                   },
                 ),

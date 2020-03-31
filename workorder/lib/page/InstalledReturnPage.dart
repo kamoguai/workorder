@@ -1,10 +1,14 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:workorder/common/style/MyStyle.dart';
 import 'package:workorder/common/utils/NavigatorUtils.dart';
 import 'package:workorder/widget/BaseWidget.dart';
 import 'package:workorder/widget/HomeDrawer.dart';
 import 'package:workorder/widget/MyScaffoldWidger.dart';
+import 'package:workorder/widget/dialog/BuildingNameTextFieldDialog.dart';
 import 'package:workorder/widget/item/CustNoTextFieldWidget.dart';
 import 'package:workorder/widget/item/UninstallCodeWidget.dart';
 ///
@@ -21,8 +25,32 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
 
   ///unInstallCodeData
   Map<String, dynamic> unInstallCodeData;
+  String uninstallItemCodeName = "";
+  String scanValue = "";
   ///bottomNavigatorBar index
   int _bnbIndex = 0;
+
+  Future _incrementCounter() async {
+    try {
+      String barcode = await BarcodeScanner.scan();
+      setState(() {
+        this.scanValue = barcode;
+        Fluttertoast.showToast(msg: this.scanValue);
+      });
+    }on PlatformException catch(e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        Fluttertoast.showToast(msg: '鏡頭沒法取得');
+      }
+      else {
+        Fluttertoast.showToast(msg: '未知錯誤：$e');
+      }
+    } on FormatException {
+      Fluttertoast.showToast(msg: 'null (使用者按返回鍵)');
+    }
+    catch (e) {
+      Fluttertoast.showToast(msg: '未知錯誤：$e');
+    }
+  }
 
   ///widget body
   Widget _body() {
@@ -32,7 +60,7 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          CustNoTextFieldWidget(callBackFunc: this._callBackFuncTextField,fromFunc: 'Inst',),
+          CustNoTextFieldWidget(callBackFunc: this._callBackFuncTextField,fromFunc: 'Inst', scanValue: this.scanValue,),
           UninstallCodeWidget(jsonData: unInstallCodeData, formFunc: 'Inst', callBackFunc: _callBackICPickData,)
         ],
       ),
@@ -46,8 +74,45 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
     });
   }
 
+  ///問題下拉callback
   void _callBackICPickData(Map<String, dynamic> pickData) {
-    print("所選data -> $pickData");
+    setState(() {
+      uninstallItemCodeName = pickData["name"];
+      if (uninstallItemCodeName.contains('大樓華廈')) {
+        Future.delayed(const Duration(milliseconds: 500),() {
+          showDialog(
+            context: context, 
+            builder: (BuildContext context)=> _buildingNameTextFieldDialog(context)
+          );
+        });
+      }
+    });
+  }
+
+  ///華夏大樓輸入callback
+  void _callBackBuildingName(String str) {
+    setState(() {
+      Fluttertoast.showToast(msg: str);
+    });
+  }
+  ///顯示華夏大樓輸入dialog
+  _buildingNameTextFieldDialog(BuildContext context) {
+    return Material(
+      type: MaterialType.transparency,
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Card(
+              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Container(
+                child: BuildingNameTextFieldDialog(callBackFunc: this._callBackBuildingName,),
+              )
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   ///bottomNavigationBar action
@@ -99,8 +164,27 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
   List<Widget> _appActions() {
 
     List<Widget> list = [];
-    
+    list.add(
+      IconButton(
+        icon: Icon(Icons.camera),
+        onPressed: (){
+          _incrementCounter();
+        },
+      )
+    );
     return list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    this.scanValue = "";
   }
 
   @override

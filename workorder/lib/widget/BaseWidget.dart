@@ -34,8 +34,6 @@ mixin BaseWidget{
       }
     ]
   """;
-  ///是否讀取中
-  var isLoading = false;
   ///讀取用dialog
   static Future<void> showLoadingDialog(BuildContext context) async {
     Widget dialog;
