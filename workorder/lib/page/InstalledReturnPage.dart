@@ -3,7 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:workorder/common/dao/InstalledReturnDao.dart';
 import 'package:workorder/common/style/MyStyle.dart';
+import 'package:workorder/common/utils/CommonUtils.dart';
 import 'package:workorder/common/utils/NavigatorUtils.dart';
 import 'package:workorder/widget/BaseWidget.dart';
 import 'package:workorder/widget/HomeDrawer.dart';
@@ -36,10 +38,14 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
       setState(() {
         this.scanValue = barcode;
         Fluttertoast.showToast(msg: this.scanValue);
+        _getUninstallCode(wkNo: this.scanValue);
       });
     }on PlatformException catch(e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
         Fluttertoast.showToast(msg: '鏡頭沒法取得');
+      }
+      else if (e.code == 'USER_CANCELED') {
+
       }
       else {
         Fluttertoast.showToast(msg: '未知錯誤：$e');
@@ -239,5 +245,25 @@ class _InstalledReturnPageState extends State<InstalledReturnPage> with BaseWidg
       );
     }
     return wList;
+  }
+
+  
+
+  ///取得裝機狀態下拉選單
+  _getUninstallCode({wkNo}) async {
+    Map<String, dynamic> jsonMap = new Map<String, dynamic>();
+    jsonMap["wkNo"] = wkNo;
+    CommonUtils.showLoadingDialog(context);
+    var res = await InstalledReturnDao.getUninstallCode(jsonMap);
+    Navigator.pop(context);
+    if (res.result) {
+      Map<String, dynamic> resData = Map<String, dynamic>();
+      resData = res.data;
+      resData["wkNo"] = wkNo;
+      
+    }
+    else {
+      Fluttertoast.showToast(msg: '查無資料唷！');
+    }
   }
 }

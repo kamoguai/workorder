@@ -111,20 +111,28 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
   void initState() {
    super.initState();
     this.nowType = searchType.custNo;
-    textController.text = "2470011331"; 
+    textController.text = "2200049518"; 
     this._custNo = textController.text;
    
   }
 
   @override
-  void didUpdateWidget(CustNoTextFieldWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.scanValue.length != 0) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    print('didChangeDependencies');
+  }
 
-      textController.text = widget.scanValue;
-      this._wkNo = textController.text;
-      nowType = searchType.wkNo;
+  @override
+  void didUpdateWidget(CustNoTextFieldWidget oldWidget) {
+    if (widget.scanValue != oldWidget.scanValue) {
+      if (widget.scanValue.length != 0) {
+
+        textController.text = widget.scanValue;
+        this._wkNo = textController.text;
+        nowType = searchType.wkNo;
+      }
     }
+    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -178,12 +186,13 @@ class _CustNoTextFieldWidgetState extends State<CustNoTextFieldWidget> with Base
                 onPressed: () {
                   textNode.unfocus();
                   if (validTextValue()) {
-                    if (nowType == searchType.custNo) {
-                      _getCustNoToWkNo();
-                    }
-                    else {
-                      _getCode(wkNo: textController.text);
-                    }
+                    widget.callBackFunc(textController.text);
+                    // if (nowType == searchType.custNo) {
+                    //   _getCustNoToWkNo();
+                    // }
+                    // else {
+                    //   _getCode(wkNo: textController.text);
+                    // }
                   }
                 },
               ),

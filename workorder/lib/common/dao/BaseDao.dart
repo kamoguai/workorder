@@ -15,21 +15,26 @@ import 'DaoResult.dart';
 ///Date: 2020-03-04
 ///
 class BaseDao {
-
   ///客編轉工單號
-  static getCustNoToWkNo(Map<String,dynamic> jsonMap) async {
+  static getCustNoToWkNo(Map<String, dynamic> jsonMap) async {
     Map<String, dynamic> mainDataArray = {};
     List<dynamic> mList = new List<dynamic>();
+
     ///map轉json
     String str = json.encode(jsonMap);
     if (Config.DEBUG) {
       print("客編轉工單號req => " + str);
     }
     String custNo = jsonMap["custNo"];
+
     ///aesEncode
     var aesData = AesUtils.aes128Encrypt(str);
     Map paramsData = {"data": aesData};
-    var res = await HttpManager.netFetch(Address.getCustNoToWkNo(custNo: custNo), paramsData, null, new Options(method: "post", contentType: ContentType.json));
+    var res = await HttpManager.netFetch(
+        Address.getCustNoToWkNo(custNo: custNo),
+        paramsData,
+        null,
+        new Options(method: "post", contentType: 'application/json'));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("客編轉工單號resp => " + res.data.toString());
@@ -37,8 +42,7 @@ class BaseDao {
       if (res.data['retCode'] == "00") {
         mList = res.data['jsonData'];
         return new DataResult(mList, true);
-      }
-      else {
+      } else {
         Fluttertoast.showToast(msg: res.data["retMSG"], timeInSecForIos: 2);
         return new DataResult(null, false);
       }
@@ -46,17 +50,20 @@ class BaseDao {
   }
 
   ///取得snr資料
-  static getPingSNR(Map<String,dynamic> jsonMap) async {
+  static getPingSNR(Map<String, dynamic> jsonMap) async {
     Map<String, dynamic> mainDataArray = {};
+
     ///map轉json
     String str = json.encode(jsonMap);
     if (Config.DEBUG) {
       print("取得snr資料req => " + str);
     }
+
     ///aesEncode
     var aesData = AesUtils.aes128Encrypt(str);
     Map paramsData = {"data": aesData};
-    var res = await HttpManager.netFetch(Address.getPingSNR(), paramsData, null, new Options(method: "post"));
+    var res = await HttpManager.netFetch(
+        Address.getPingSNR(), paramsData, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("取得snr資料resp => " + res.data.toString());
@@ -65,6 +72,4 @@ class BaseDao {
       return new DataResult(mainDataArray, true);
     }
   }
-
-  
 }
