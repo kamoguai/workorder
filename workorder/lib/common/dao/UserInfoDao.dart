@@ -87,23 +87,29 @@ class UserInfoDao {
     ///map轉json
     String str = json.encode(jsonMap);
     print("派裝系統使用者信息req => " + str);
+    String accNo = jsonMap["accNo"];
+    String passWord = jsonMap["passWord"];
+    String sysName = jsonMap["sysName"];
+    String ssoKey = jsonMap["ssoKey"];
 
-    ///aesEncode
-    var aesData = AesUtils.aes128Encrypt(str);
-    Map paramsData = {"data": aesData};
-    var reqUrl = "$serverUrl";
-    var res = await HttpManager.netFetch(
-        reqUrl,
-        paramsData,
-        null,
-        new Options(
-            method: "post", contentType: "application/x-www-form-urlencoded"));
+    var reqUrl = "$serverUrl" +
+        "?accNo=" +
+        accNo +
+        "&passWord=" +
+        passWord +
+        "&sysName=" +
+        sysName +
+        "&ssoKey=" +
+        ssoKey;
+
+    ///response 會用aesDecode
+    var res = await HttpManager.netFetch(reqUrl, null, null, null);
     if (res != null && res.result) {
       if (Config.DEBUG) {
         print("派裝系統使用者信息resp => " + res.data.toString());
       }
       if (res.data['retCode'] == "00") {
-        mainDataArray = res.data['data'];
+        mainDataArray = res.data['jsonData'];
       }
       if (mainDataArray.length > 0) {
         print("使用者資訊-> $mainDataArray");

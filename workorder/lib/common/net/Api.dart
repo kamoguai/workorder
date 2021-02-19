@@ -99,7 +99,7 @@ class HttpManager {
               headers: response.headers);
         }
         if (response.request.path.contains(
-            "http://wos.dctv.net.tw:8083/WorkInstall/getAccPermissions")) {
+            "http://wos.dctv.net.tw:8081/WorkReply/json/interface!getAccPermissions")) {
           var result = AesUtils.aes128Decrypt(response.toString());
           var jsonStr = jsonDecode(result);
           Map<String, dynamic> map = jsonStr;
